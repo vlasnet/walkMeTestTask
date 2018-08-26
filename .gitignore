@@ -72,7 +72,6 @@ typings/
 # firebase
 .firebaserc
 firebase.json
-/public
 
 # misc
 /.idea
