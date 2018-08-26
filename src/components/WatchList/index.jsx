@@ -7,7 +7,7 @@ const WatchList = props => {
   const {watchList, play, deleteVideo} = props
   return (
     <div className={styles.container}>
-      <h2>Watch History</h2>
+      <h2 className={styles.title}>Watch History</h2>
       <div className={styles.watchList}>
         {watchList.length === 0
           ? <div>Watchlist is empty</div>
