@@ -116,5 +116,6 @@
     "prettier": "^1.12.1",
     "stylelint": "^9.2.1"
   },
-  "proxy": "http://localhost:3001/"
+  "proxy": "http://localhost:3001/",
+  "homepage" : "https://vlasnet.github.io/walkMeTestTask/"
 }
