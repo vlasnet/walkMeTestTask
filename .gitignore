@@ -66,6 +66,9 @@ typings/
 # testing
 /coverage
 
+# production
+/build
+
 # firebase
 .firebaserc
 firebase.json
