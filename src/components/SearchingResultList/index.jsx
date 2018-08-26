@@ -4,13 +4,13 @@ import styles from './styles.css';
 import SearchingResultItem from '../SearchingResultItem';
 
 const SearchingResultList = props => {
-  const {resultVideoList} = props;
+  const {resultVideoList, play} = props;
   return (
     <div className={styles.container}>
       <ul className={styles.list}>
         {resultVideoList.map(result => (
           <li key={result.etag} className={styles.listItem}>
-            <SearchingResultItem result={result}/>
+            <SearchingResultItem result={result} play={play}/>
           </li>
         ))}
       </ul>
@@ -49,6 +49,7 @@ SearchingResultList.propTypes = {
       }).isRequired,
     }).isRequired,
   ).isRequired,
+  play: PropTypes.func.isRequired,
 };
 
 SearchingResultList.defaultProps = {

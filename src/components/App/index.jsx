@@ -5,11 +5,13 @@ import styles from './styles.css'
 import {API, baseUrl, maxResultsAmount} from '../../api/config';
 import SearchField from '../SearchField';
 import SearchingResultList from '../SearchingResultList';
+import VideoPlayer from '../VideoPlayer';
 
 export default class App extends Component {
   state = {
     filter: '',
     resultVideoList: [],
+    currentVideoId: '',
   };
 
   componentDidMount() {
@@ -25,6 +27,14 @@ export default class App extends Component {
         })
       )
       .catch(error => console.log(`Error while fetching searching results list: ${error}`));
+  };
+
+  setChosenVideoAsCurrent = (videoInfo) => {
+    const { id } = videoInfo
+    this.setState({
+      currentVideoId: id,
+      resultVideoList: [],
+    });
   };
 
   handleFilter = (value) => {
@@ -43,11 +53,12 @@ export default class App extends Component {
   isSearchResultsVisible = () => !!this.state.resultVideoList.length;
 
   render() {
-    const {filter, resultVideoList} = this.state;
+    const {filter, resultVideoList, currentVideoId} = this.state;
     return (
       <div className={styles.container}>
         <SearchField filter={filter} handleFilter={this.handleFilter} handleMovieSearch={this.handleMovieSearch}/>
-        { this.isSearchResultsVisible && <SearchingResultList resultVideoList={resultVideoList}/> }
+        { this.isSearchResultsVisible && <SearchingResultList resultVideoList={resultVideoList} play={this.setChosenVideoAsCurrent}/> }
+        <VideoPlayer videoId={currentVideoId}/>
       </div>
     );
   }

@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import styles from './styles.css';
 
 const SearchingResultItem = props => {
-  const {result} = props;
+  const {result, play} = props;
   return (
     <div className={styles.container}>
       <div className={styles.image}>
         <img src={result.snippet.thumbnails.default.url} alt="Video thumbnail"/>
       </div>
       <div className={styles.title}>{result.snippet.title}</div>
-      <button className={styles.play}>Play</button>
+      <button className={styles.play} onClick={() => play({id :result.id.videoId, title: result.snippet.title})}>Play</button>
     </div>
   );
 };
@@ -44,6 +44,7 @@ SearchingResultItem.propTypes = {
       }),
     }).isRequired,
   }).isRequired,
+  play: PropTypes.func.isRequired,
 };
 
 export default SearchingResultItem;
