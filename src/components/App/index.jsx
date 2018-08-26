@@ -6,15 +6,20 @@ import {API, baseUrl, maxResultsAmount} from '../../api/config';
 import SearchField from '../SearchField';
 import SearchingResultList from '../SearchingResultList';
 import VideoPlayer from '../VideoPlayer';
+import WatchList from "../WatchList";
 
 export default class App extends Component {
   state = {
     filter: '',
     resultVideoList: [],
     currentVideoId: '',
+    watchList: JSON.parse(localStorage.getItem('watchList')) || [],
   };
 
-  componentDidMount() {
+  componentDidUpdate(prevProps, prevState) {
+    if(JSON.stringify(prevState.watchList) !== JSON.stringify(this.state.watchList)) {
+      localStorage.setItem('watchList', JSON.stringify(this.state.watchList));
+    }
   }
 
   getVideoListByKeyword = (keyWord) => {
@@ -30,7 +35,18 @@ export default class App extends Component {
   };
 
   setChosenVideoAsCurrent = (videoInfo) => {
-    const { id } = videoInfo
+    const { id } = videoInfo;
+    this.play(id);
+    if (this.isWatchlistHasThatVideo(id)) return
+    this.setState({
+      watchList: [videoInfo, ...this.state.watchList]
+    })
+
+  };
+
+  isWatchlistHasThatVideo = (videoId) => this.state.watchList.find(video => video.id === videoId) !== undefined;
+
+  play = (id) => {
     this.setState({
       currentVideoId: id,
       resultVideoList: [],
@@ -50,15 +66,24 @@ export default class App extends Component {
     this.getVideoListByKeyword(filter);
   };
 
+  deleteVideo = id => {
+    this.setState(state => ({
+      watchList: state.watchList.filter(video => video.id !== id)
+    }));
+  };
+
   isSearchResultsVisible = () => !!this.state.resultVideoList.length;
 
   render() {
-    const {filter, resultVideoList, currentVideoId} = this.state;
+    const {filter, resultVideoList, currentVideoId, watchList} = this.state;
     return (
       <div className={styles.container}>
         <SearchField filter={filter} handleFilter={this.handleFilter} handleMovieSearch={this.handleMovieSearch}/>
         { this.isSearchResultsVisible && <SearchingResultList resultVideoList={resultVideoList} play={this.setChosenVideoAsCurrent}/> }
-        <VideoPlayer videoId={currentVideoId}/>
+        <div className={styles.appBody}>
+          <WatchList watchList={watchList} play={this.play} deleteVideo={this.deleteVideo}/>
+          <VideoPlayer videoId={currentVideoId}/>
+        </div>
       </div>
     );
   }
