@@ -14,6 +14,7 @@ export default class App extends Component {
     resultVideoList: [],
     currentVideoId: '',
     watchList: JSON.parse(localStorage.getItem('watchList')) || [],
+    previousSearchResults: [],
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -36,12 +37,14 @@ export default class App extends Component {
 
   setChosenVideoAsCurrent = (videoInfo) => {
     const { id } = videoInfo;
-    this.play(id);
-    if (this.isWatchlistHasThatVideo(id)) return
     this.setState({
-      watchList: [videoInfo, ...this.state.watchList]
-    })
-
+      previousSearchResults: [...this.state.resultVideoList],
+    });
+    this.play(id);
+    if (this.isWatchlistHasThatVideo(id)) return;
+    this.setState({
+      watchList: [videoInfo, ...this.state.watchList],
+    });
   };
 
   isWatchlistHasThatVideo = (videoId) => this.state.watchList.find(video => video.id === videoId) !== undefined;
@@ -50,6 +53,7 @@ export default class App extends Component {
     this.setState({
       currentVideoId: id,
       resultVideoList: [],
+      filter: '',
     });
   };
 
@@ -74,12 +78,21 @@ export default class App extends Component {
 
   isSearchResultsVisible = () => !!this.state.resultVideoList.length;
 
+  isShowPreviousResultsButtonVisible = () => !!this.state.previousSearchResults.length;
+
+  showPreviousResults = () => {
+    this.setState({
+      resultVideoList: [...this.state.previousSearchResults],
+    });
+  };
+
   render() {
     const {filter, resultVideoList, currentVideoId, watchList} = this.state;
     return (
       <div className={styles.container}>
         <SearchField filter={filter} handleFilter={this.handleFilter} handleMovieSearch={this.handleMovieSearch}/>
-        { this.isSearchResultsVisible && <SearchingResultList resultVideoList={resultVideoList} play={this.setChosenVideoAsCurrent}/> }
+        { this.isShowPreviousResultsButtonVisible() && <button className={styles.resultsButton} onClick={this.showPreviousResults}>Show previous search results</button>}
+        { this.isSearchResultsVisible() && <SearchingResultList resultVideoList={resultVideoList} play={this.setChosenVideoAsCurrent}/> }
         <div className={styles.appBody}>
           <WatchList watchList={watchList} play={this.play} deleteVideo={this.deleteVideo}/>
           <VideoPlayer videoId={currentVideoId}/>
