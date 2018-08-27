@@ -79,7 +79,7 @@ export default class App extends Component {
         { this.isSearchResultsVisible() && <SearchingResultList resultVideoList={resultVideoList} play={this.setChosenVideoAsCurrent}/> }
         <div className={styles.appBody}>
           <WatchList watchList={watchList} play={this.play} deleteVideo={this.deleteVideo}/>
-          <VideoPlayer videoId={currentVideoId}/>
+          {currentVideoId && <VideoPlayer videoId={currentVideoId}/>}
         </div>
       </div>
     );
