@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import React, {Component} from 'react';
 import axios from "axios";
+import debounce from 'lodash.debounce';
 import isequal from 'lodash.isequal';
 import styles from './styles.css'
 import {API, baseUrl, maxResultsAmount} from '../../api/config';
@@ -57,18 +58,14 @@ export default class App extends Component {
     });
   };
 
-  handleFilter = (value) => {
+  handleFilter = debounce((value) => {
     this.setState({
       filter: value,
     })
-  };
-
-  handleMovieSearch = (evt) => {
-    evt.preventDefault();
     const {filter} = this.state;
     if (filter === null || filter.trim() === "") return;
     this.getVideoListByKeyword(filter);
-  };
+  }, 250);
 
   deleteVideo = id => {
     this.setState(state => ({
