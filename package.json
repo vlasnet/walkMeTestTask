@@ -26,6 +26,8 @@
     "global": "^4.3.2",
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
+    "lodash.debounce": "^4.0.8",
+    "lodash.isequal": "^4.5.0",
     "moment": "^2.22.1",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",
@@ -37,8 +39,8 @@
     "react": "^16.4.0",
     "react-dev-utils": "^5.0.1",
     "react-dom": "^16.4.0",
-    "react-hot-loader": "^4.2.0",
     "react-firebase": "^2.2.8",
+    "react-hot-loader": "^4.2.0",
     "react-modal": "^3.4.4",
     "react-router-dom": "^4.2.2",
     "resolve": "1.6.0",
@@ -117,5 +119,5 @@
     "stylelint": "^9.2.1"
   },
   "proxy": "http://localhost:3001/",
-  "homepage" : "https://vlasnet.github.io/walkMeTestTask/"
+  "homepage": "https://vlasnet.github.io/walkMeTestTask/"
 }
