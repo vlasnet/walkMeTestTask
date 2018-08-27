@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import React, {Component} from 'react';
 import axios from "axios";
+import debounce from 'lodash.debounce';
 import isequal from 'lodash.isequal';
 import styles from './styles.css'
 import {API, baseUrl, maxResultsAmount} from '../../api/config';
@@ -15,7 +16,6 @@ export default class App extends Component {
     resultVideoList: [],
     currentVideoId: '',
     watchList: JSON.parse(localStorage.getItem('watchList')) || [],
-    previousSearchResults: [],
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -37,9 +37,6 @@ export default class App extends Component {
 
   setChosenVideoAsCurrent = (videoInfo) => {
     const { id } = videoInfo;
-    this.setState({
-      previousSearchResults: [...this.state.resultVideoList],
-    });
     this.play(id);
     if (this.isWatchlistHasThatVideo(id)) return;
     this.setState({
@@ -57,18 +54,14 @@ export default class App extends Component {
     });
   };
 
-  handleFilter = (value) => {
+  handleFilter = debounce((value) => {
     this.setState({
       filter: value,
     })
-  };
-
-  handleMovieSearch = (evt) => {
-    evt.preventDefault();
     const {filter} = this.state;
     if (filter === null || filter.trim() === "") return;
     this.getVideoListByKeyword(filter);
-  };
+  }, 250);
 
   deleteVideo = id => {
     this.setState(state => ({
@@ -78,20 +71,11 @@ export default class App extends Component {
 
   isSearchResultsVisible = () => !!this.state.resultVideoList.length;
 
-  isShowPreviousResultsButtonVisible = () => !!this.state.previousSearchResults.length;
-
-  showPreviousResults = () => {
-    this.setState({
-      resultVideoList: [...this.state.previousSearchResults],
-    });
-  };
-
   render() {
     const {filter, resultVideoList, currentVideoId, watchList} = this.state;
     return (
       <div className={styles.container}>
         <SearchField filter={filter} handleFilter={this.handleFilter} handleMovieSearch={this.handleMovieSearch}/>
-        { this.isShowPreviousResultsButtonVisible() && <button className={styles.resultsButton} onClick={this.showPreviousResults}>Show previous search results</button>}
         { this.isSearchResultsVisible() && <SearchingResultList resultVideoList={resultVideoList} play={this.setChosenVideoAsCurrent}/> }
         <div className={styles.appBody}>
           <WatchList watchList={watchList} play={this.play} deleteVideo={this.deleteVideo}/>
