@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import React, {Component} from 'react';
 import axios from "axios";
+import isequal from 'lodash.isequal';
 import styles from './styles.css'
 import {API, baseUrl, maxResultsAmount} from '../../api/config';
 import SearchField from '../SearchField';
@@ -18,9 +19,8 @@ export default class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if(JSON.stringify(prevState.watchList) !== JSON.stringify(this.state.watchList)) {
+    if(isequal(prevState.watchList, this.state.watchList)) return;
       localStorage.setItem('watchList', JSON.stringify(this.state.watchList));
-    }
   }
 
   getVideoListByKeyword = (keyWord) => {
