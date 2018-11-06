@@ -8,7 +8,7 @@ The task is quite simple, you need to build a small web app with ability to sear
 <h2>UI:</h2>
 
 Here is a mockup: 
-<img src="https://github.com/shlomisas/JS-Practical-Interview/blob/master/exams/2/mock.png" alt="mockup">
+<img src="https://github.com/vlasnet/walkMeTestTask/tree/master/public/mock.png" alt="mockup">
 
 <ul>The UI include the following flows:
 
